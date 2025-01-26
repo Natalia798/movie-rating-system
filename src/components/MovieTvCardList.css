@@ -1,0 +1,51 @@
+.movie-card {
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-card img {
+  max-height: 250px;
+}
+
+.movie-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-primary);
+  font-weight: bold;
+}
+
+.movie-card-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-primary);
+}
+
+.movie-card-buttons {
+  margin: auto;
+}
+
+.movie-card-buttons button {
+  width: fit-content;
+  margin-bottom: 8px;
+  background-color: var(--bg-dark);
+  border: 2px solid var(--bg-dark);
+  color: var(--text-light);
+  background-color: var(--button-color);
+  border: 2px solid var(--button-color);
+  color: var(--text-dark);
+}
+
+.movie-card-buttons button:hover {
+  background-color: var(--bg-dark);
+  border: 2px solid var(--bg-dark);
+  color: var(--text-light);
+}

@@ -37,10 +37,10 @@ function Header() {
             </span>
             <ul className={dropdownMenuClasses}>
               <li className={isDisplayed ? 'container' : null}>
-                <Link to="/">MOVIES</Link>
+                <Link to="/category/movie">MOVIES</Link>
               </li>
               <li className={isDisplayed ? 'container' : null}>
-                <Link to="/">TV SHOWS</Link>
+                <Link to="/category/tv">TV SHOWS</Link>
               </li>
               {state.isAuthenticated ? (
                 <>

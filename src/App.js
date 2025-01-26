@@ -7,6 +7,7 @@ import Page404 from './pages/Page404';
 import Register from './pages/Register';
 import Layout from './components/Layout';
 import Login from './pages/Login';
+import MovieTvCategory from './pages/MovieTvCategory';
 
 function App() {
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -20,6 +21,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="*" element={<Page404 />} />
+            <Route path="/category/:categoryId" element={<MovieTvCategory />} />
           </Routes>
         </Layout>
       </Router>

@@ -1,7 +1,11 @@
-.Header .nav {
+.Header {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 3;
+}
+
+.Header .nav {
+  position: sticky;
   width: 100%;
   height: auto;
   padding: 15px;
