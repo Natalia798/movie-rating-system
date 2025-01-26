@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-content: center;
+  margin: 2rem 0;
+}
+
+.formControl {
+  margin-bottom: 1rem;
+}
+
+.registerButton {
+  margin-bottom: 2rem;
+  color: var(--text-light);
+  background-color: var(--bg-dark);
+  border: 2px solid var(--bg-dark);
+}
+
+.registerButton:hover {
+  background-color: var(--button-color);
+  border: 2px solid var(--button-color);
+  color: var(--text-primary);
+}
+
+.loginButton {
+  font-weight: bold;
+  text-decoration: underline;
+}
