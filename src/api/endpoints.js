@@ -8,3 +8,11 @@ export function getItemsByCategoryEndpoint(category, pageNumber = 1) {
 export function getGenresEndpoint(category) {
   return `https://api.themoviedb.org/3/genre/${category}/list?api_key=${API_KEY}&language=en-US`;
 }
+
+export function getMovieTvDetailsEndpoint(category, itemId) {
+  return `https://api.themoviedb.org/3/${category}/${itemId}?api_key=${API_KEY}&language=en-US`;
+}
+
+export function getReviewsEndpoint(category, itemId) {
+  return `https://api.themoviedb.org/3/${category}/${itemId}/reviews?api_key=${API_KEY}&language=en-US`;
+}

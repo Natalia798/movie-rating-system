@@ -17,3 +17,10 @@ export function register(user) {
     payload: user,
   };
 }
+
+export function addCommentAndRating(user) {
+  return {
+    type: 'ADD_REVIEW',
+    payload: user,
+  };
+}

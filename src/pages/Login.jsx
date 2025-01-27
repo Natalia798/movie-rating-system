@@ -7,13 +7,16 @@ function Login() {
 
   function handleLogin(username, password, setError, navigate) {
     const users = JSON.parse(localStorage.getItem('users')) || [];
+
     const existingUser = users.find(
       (user) => user.username === username && user.password === password
     );
+
     if (!existingUser) {
       setError('Invalid username or password!');
       return;
     }
+
     dispatch({ type: 'LOGIN', payload: existingUser });
     navigate('/');
   }

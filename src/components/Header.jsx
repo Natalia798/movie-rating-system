@@ -58,7 +58,7 @@ function Header() {
                 </>
               ) : (
                 <li className={isDisplayed ? 'container' : null}>
-                  <Link to="/register">AUTH</Link>
+                  <Link to="/login">AUTH</Link>
                 </li>
               )}
             </ul>

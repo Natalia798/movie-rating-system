@@ -7,13 +7,16 @@ function Register() {
 
   function handleRegister(username, password, setError, navigate) {
     const users = JSON.parse(localStorage.getItem('users')) || [];
+
     if (users.some((user) => user.username === username)) {
       setError('Username already exists!');
       return;
     }
-    const newUser = { username, password };
+
+    const newUser = { username, password, reviews: [] };
     users.push(newUser);
     localStorage.setItem('users', JSON.stringify(users));
+
     dispatch({ type: 'REGISTER', payload: newUser });
     navigate('/');
   }

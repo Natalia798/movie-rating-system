@@ -29,11 +29,8 @@
   color: var(--text-primary);
 }
 
-.movie-card-buttons {
+.details-button {
   margin: auto;
-}
-
-.movie-card-buttons button {
   width: fit-content;
   margin-bottom: 8px;
   background-color: var(--bg-dark);
@@ -44,7 +41,7 @@
   color: var(--text-dark);
 }
 
-.movie-card-buttons button:hover {
+.details-button:hover {
   background-color: var(--bg-dark);
   border: 2px solid var(--bg-dark);
   color: var(--text-light);

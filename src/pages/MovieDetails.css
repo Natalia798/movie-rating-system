@@ -1,0 +1,173 @@
+.movie-container {
+  padding: 20px;
+}
+
+.movie-details-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.img-fluid {
+  max-width: 50%;
+  height: auto;
+  max-height: 500px;
+}
+
+.text-container {
+  flex: 1 1 65%;
+  text-align: left;
+  padding: 10px;
+}
+
+.text-container p {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.actions-container {
+  margin-top: 20px;
+}
+
+.buttons {
+  margin-top: 10px;
+  background-color: var(--button-color);
+  border: 2px solid var(--button-color);
+  color: var(--text-primary);
+  padding: 10px 15px;
+  width: fit-content;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.buttons:hover {
+  background-color: var(--bg-dark);
+  border: 2px solid var(--bg-dark);
+  color: var(--text-light);
+}
+
+.favorites-button {
+  margin-right: 10px;
+}
+
+.review-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  border-top: 2px solid var(--line-color);
+  text-align: center;
+}
+
+.review-section h3 {
+  margin: 10px 0;
+  padding-bottom: 10px;
+}
+
+.rating-section {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rating-input {
+  margin: 0 5px;
+}
+
+.comments-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.comment-input {
+  width: 60%;
+  padding: 8px;
+  margin-top: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.submit-review-button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
+.reviews-container {
+  padding-top: 20px;
+  border-top: 2px solid var(--line-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: auto;
+  text-align: center;
+}
+
+.reviews-container h3 {
+  margin-bottom: 20px;
+}
+
+.review {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.review p {
+  margin: 5px 0;
+  text-align: left;
+}
+
+@media (max-width: 992px) {
+  .movie-details-container {
+    flex-direction: column;
+  }
+
+  .text-container,
+  .image-container {
+    flex: 1 1 100%;
+  }
+
+  .img-fluid {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+  }
+
+  .comment-input {
+    width: 80%;
+  }
+
+  .reviews-container {
+    min-height: auto;
+  }
+
+  .review {
+    width: 90%;
+  }
+}

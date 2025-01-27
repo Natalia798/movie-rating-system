@@ -8,20 +8,7 @@ import {
 } from '../api/endpoints';
 import MovieTvCardList from '../components/MovieTvCardList';
 import Pagination from '../components/Pagination';
-
-const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
-
-function getMovieTvCategory(data) {
-  return data.map((item) => ({
-    id: item.id,
-    title: item.title || item.name,
-    description: item.overview || 'No description available',
-    imageUrl: item.poster_path ? `${IMAGE_BASE_URL}${item.poster_path}` : null,
-    genres: item.genre_ids,
-    voteAverage: item.vote_average,
-    voteCount: item.vote_count,
-  }));
-}
+import { getMovieTvDetails } from '../api/adaptors';
 
 function MovieTvCategory() {
   const { categoryId } = useParams();
@@ -32,6 +19,7 @@ function MovieTvCategory() {
     categoryId,
     currentPage
   );
+
   const {
     data: moviesTvShows,
     loading: loadingMovies,
@@ -46,7 +34,9 @@ function MovieTvCategory() {
   } = useFetch(genreEndpoint);
 
   const adaptedMovieTvList = moviesTvShows?.results
-    ? getMovieTvCategory(moviesTvShows.results)
+    ? moviesTvShows.results.map((item) =>
+        getMovieTvDetails(item, genresData?.genres || [])
+      )
     : [];
 
   let title = '';
@@ -71,6 +61,7 @@ function MovieTvCategory() {
       <MovieTvCardList
         movieTvList={adaptedMovieTvList}
         genreList={genresData?.genres || []}
+        categoryId={categoryId}
       />
       <Pagination active={currentPage} baseUrl={`/category/${categoryId}`} />
     </Container>
