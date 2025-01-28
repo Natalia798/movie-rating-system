@@ -11,6 +11,7 @@ function Header() {
   const [isDisplayed, setIsDisplayed] = useState(false);
 
   const handleLogout = () => {
+    localStorage.removeItem('user');
     dispatch({ type: 'LOGOUT' });
     navigate('/');
   };

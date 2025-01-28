@@ -11,6 +11,12 @@ import { AuthContext } from '../store/auth/authContext';
 import { ReviewsContext } from '../store/reviews/reviewsContext';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
+import { FavoritesWatchlistContext } from '../store/favorites/favoritesContext';
+import {
+  addToFavorites,
+  addToWatchlist,
+} from '../store/favorites/favoritesActions';
+
 import './MovieDetails.css';
 
 function MovieTvDetails() {
@@ -19,11 +25,13 @@ function MovieTvDetails() {
   const { category, itemId } = useParams();
   const [userRating, setUserRating] = useState(0);
   const [comment, setComment] = useState('');
-  const [submittedReview, setSubmittedReview] = useState(false);
+  const [setSubmittedReview] = useState(false);
+  const [movieTvDetails, setMovieTvDetails] = useState({});
+  const { favoritesWatchlistDispatch } = useContext(FavoritesWatchlistContext);
 
   const movieDetailsEndpoint = getMovieTvDetailsEndpoint(category, itemId);
   const {
-    data: movieTvDetails,
+    data: fetchedMovieTvDetails,
     loading,
     error,
   } = useFetch(movieDetailsEndpoint);
@@ -43,35 +51,41 @@ function MovieTvDetails() {
   } = useFetch(reviewsEndpoint);
 
   useEffect(() => {
-    if (submittedReview && state.isAuthenticated) {
+    if (fetchedMovieTvDetails && genresData) {
+      const genreList = genresData?.genres || [];
+      setMovieTvDetails(getMovieTvDetails(fetchedMovieTvDetails, genreList));
+    }
+  }, [fetchedMovieTvDetails, genresData]);
+
+  useEffect(() => {
+    if (state.isAuthenticated) {
       const users = JSON.parse(localStorage.getItem('users')) || [];
       const currentUser = users.find(
         (user) => user.username === state.user.username
       );
-      reviewDispatch({
-        type: 'SET_USER_REVIEWS',
-        payload: currentUser?.reviews || [],
-      });
-      setSubmittedReview(false);
+      const movieReviews = currentUser?.reviews || [];
+      const filteredReview = movieReviews.filter(
+        (review) => review.movieId === itemId
+      );
+
+      if (filteredReview.length > 0) {
+        reviewDispatch({
+          type: 'SET_USER_REVIEWS',
+          payload: filteredReview,
+        });
+      }
     }
-  }, [
-    submittedReview,
-    state.isAuthenticated,
-    state.user?.username,
-    reviewDispatch,
-  ]);
+  }, [state.isAuthenticated, state.user?.username, itemId, reviewDispatch]);
 
   if (loading || genresLoading) return <div>Loading...</div>;
   if (error || genresError)
     return <div>{error ? error.message : genresError.message}</div>;
+
   if (!movieTvDetails || !genresData || !reviewsData)
     return <div>No data available</div>;
 
-  const genreList = genresData.genres || [];
-  const adaptedDetails = getMovieTvDetails(movieTvDetails, genreList);
-
   const { title, description, imageUrl, voteAverage, voteCount, genres } =
-    adaptedDetails;
+    movieTvDetails;
 
   const handleSubmitReview = (event) => {
     event.preventDefault();
@@ -85,21 +99,17 @@ function MovieTvDetails() {
       };
 
       const users = JSON.parse(localStorage.getItem('users')) || [];
-
       const updatedUsers = users.map((user) =>
         user.username === state.user.username
           ? {
               ...user,
               reviews: [
-                ...(user.reviews || []).filter(
-                  (r) => r.movieId !== review.movieId
-                ),
+                ...(user.reviews || []).filter((r) => r.movieId !== itemId),
                 review,
               ],
             }
           : user
       );
-
       localStorage.setItem('users', JSON.stringify(updatedUsers));
 
       reviewDispatch({
@@ -115,8 +125,80 @@ function MovieTvDetails() {
     }
   };
 
+  const handleAddToFavoritesButton = (event) => {
+    event.preventDefault();
+
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+
+    const currentUser = users.find(
+      (user) => user.username === state.user.username
+    );
+
+    if (currentUser) {
+      const movieAlreadyInFavorites = currentUser.favorites?.some(
+        (movie) => movie.id === movieTvDetails.id
+      );
+
+      if (!movieAlreadyInFavorites) {
+        const updatedUsers = users.map((user) =>
+          user.username === state.user.username
+            ? {
+                ...user,
+                favorites: [...(user.favorites || []), movieTvDetails],
+              }
+            : user
+        );
+
+        localStorage.setItem('users', JSON.stringify(updatedUsers));
+
+        favoritesWatchlistDispatch(addToFavorites(movieTvDetails));
+        alert('Added to Favorites!');
+      } else {
+        alert('This movie is already in your favorites!');
+      }
+    } else {
+      alert('User not found.');
+    }
+  };
+
+  const handleAddToWatchlistButton = (event) => {
+    event.preventDefault();
+
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+
+    const currentUser = users.find(
+      (user) => user.username === state.user.username
+    );
+
+    if (currentUser) {
+      const movieAlreadyInWatchlist = currentUser.watchlist?.some(
+        (movie) => movie.id === movieTvDetails.id
+      );
+
+      if (!movieAlreadyInWatchlist) {
+        const updatedUsers = users.map((user) =>
+          user.username === state.user.username
+            ? {
+                ...user,
+                watchlist: [...(user.watchlist || []), movieTvDetails],
+              }
+            : user
+        );
+
+        localStorage.setItem('users', JSON.stringify(updatedUsers));
+
+        favoritesWatchlistDispatch(addToWatchlist(movieTvDetails));
+        alert('Added to Watchlist!');
+      } else {
+        alert('This movie is already in your watchlist!');
+      }
+    } else {
+      alert('User not found.');
+    }
+  };
+
   const truncateText = (text, maxLength) => {
-    if (text.length > maxLength) {
+    if (text && text.length > maxLength) {
       return text.slice(0, maxLength) + ' [...]';
     }
     return text;
@@ -133,7 +215,9 @@ function MovieTvDetails() {
         <div className="text-container">
           <p>
             <strong>Genres:</strong>{' '}
-            {genres.length > 0 ? genres.join(', ') : 'No genres available'}
+            {genres && genres.length > 0
+              ? genres.join(', ')
+              : 'No genres available'}
           </p>
           <p>
             <strong>Description: </strong> {description}
@@ -144,10 +228,15 @@ function MovieTvDetails() {
 
           {state.isAuthenticated && (
             <div className="actions-container">
-              <Button className="buttons favorites-button">
+              <Button
+                className="buttons favorites-button"
+                onClick={handleAddToFavoritesButton}
+              >
                 Add to Favorites
               </Button>
-              <Button className="buttons">Add to Watchlist</Button>
+              <Button className="buttons" onClick={handleAddToWatchlistButton}>
+                Add to Watchlist
+              </Button>
             </div>
           )}
         </div>
@@ -193,28 +282,30 @@ function MovieTvDetails() {
         <div className="reviews-container">
           <h3>Reviews</h3>
 
-          {reviewState.reviews && reviewState.reviews.length > 0 && (
-            <>
-              {reviewState.reviews.map((review, index) => (
-                <div key={index} className="review">
-                  <p>
-                    <strong>Author:</strong> {review.username}
-                  </p>
-                  <p>
-                    <strong>Rating:</strong> {review.rating}/10
-                  </p>
-                  <p>
-                    <strong>Comment:</strong> {review.comment}
-                  </p>
-                </div>
-              ))}
-            </>
-          )}
+          {reviewState.reviews && reviewState.reviews.length > 0
+            ? reviewState.reviews
+                .filter((review) => review.movieId === itemId) // Filtrează recenziile pentru itemId
+                .map((review, index) => (
+                  <div key={index} className="review">
+                    <p>
+                      <strong>Author:</strong> {review.username}
+                    </p>
+                    <p>
+                      <strong>Rating:</strong> {review.rating}/10
+                    </p>
+                    <p>
+                      <strong>Comment:</strong> {review.comment}
+                    </p>
+                  </div>
+                ))
+            : null}
 
           {reviewsLoading && <p>Loading TMDB reviews...</p>}
           {reviewsError && <p>Error loading reviews: {reviewsError.message}</p>}
 
-          {reviewsData && reviewsData.results.length > 0 ? (
+          {reviewsData &&
+          reviewsData.results &&
+          reviewsData.results.length > 0 ? (
             reviewsData.results.map((review) => (
               <div key={review.id} className="review">
                 <p>
@@ -222,12 +313,9 @@ function MovieTvDetails() {
                 </p>
                 <p>
                   <strong>Rating:</strong>{' '}
-                  {review.author_details.rating || 'N/A'}
-                  /10
+                  {review.author_details.rating || 'N/A'} /10
                 </p>
-                <p>
-                  <strong>Comment:</strong> {truncateText(review.content, 300)}
-                </p>
+                <p>{truncateText(review.content, 250)}</p>
               </div>
             ))
           ) : (

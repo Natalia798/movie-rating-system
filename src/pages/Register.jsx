@@ -17,6 +17,8 @@ function Register() {
     users.push(newUser);
     localStorage.setItem('users', JSON.stringify(users));
 
+    localStorage.setItem('user', JSON.stringify(newUser));
+
     dispatch({ type: 'REGISTER', payload: newUser });
     navigate('/');
   }

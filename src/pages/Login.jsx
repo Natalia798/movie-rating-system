@@ -17,6 +17,8 @@ function Login() {
       return;
     }
 
+    localStorage.setItem('user', JSON.stringify(existingUser));
+
     dispatch({ type: 'LOGIN', payload: existingUser });
     navigate('/');
   }
