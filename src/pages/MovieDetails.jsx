@@ -7,13 +7,15 @@ import {
 } from '../api/endpoints';
 import { useFetch } from '../utils/hooks/useFetch';
 import { getMovieTvDetails } from '../api/adaptors';
-import { AuthContext } from '../store/auth/context';
+import { AuthContext } from '../store/auth/authContext';
+import { ReviewsContext } from '../store/reviews/reviewsContext';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import './MovieDetails.css';
 
 function MovieTvDetails() {
-  const { state, dispatch } = useContext(AuthContext);
+  const { state } = useContext(AuthContext);
+  const { reviewState, reviewDispatch } = useContext(ReviewsContext);
   const { category, itemId } = useParams();
   const [userRating, setUserRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -46,13 +48,18 @@ function MovieTvDetails() {
       const currentUser = users.find(
         (user) => user.username === state.user.username
       );
-      dispatch({
+      reviewDispatch({
         type: 'SET_USER_REVIEWS',
         payload: currentUser?.reviews || [],
       });
       setSubmittedReview(false);
     }
-  }, [submittedReview, state.isAuthenticated, state.user?.username, dispatch]);
+  }, [
+    submittedReview,
+    state.isAuthenticated,
+    state.user?.username,
+    reviewDispatch,
+  ]);
 
   if (loading || genresLoading) return <div>Loading...</div>;
   if (error || genresError)
@@ -77,29 +84,29 @@ function MovieTvDetails() {
         username: state.user.username,
       };
 
-      // Încarcă lista de utilizatori din localStorage
       const users = JSON.parse(localStorage.getItem('users')) || [];
 
-      // Găsește utilizatorul curent și adaugă recenzia
       const updatedUsers = users.map((user) =>
         user.username === state.user.username
           ? {
               ...user,
-              reviews: [...(user.reviews || []), review], // Actualizează recenziile utilizatorului
+              reviews: [
+                ...(user.reviews || []).filter(
+                  (r) => r.movieId !== review.movieId
+                ),
+                review,
+              ],
             }
           : user
       );
 
-      // Salvează lista actualizată de utilizatori în localStorage
       localStorage.setItem('users', JSON.stringify(updatedUsers));
 
-      // Actualizează starea aplicației cu recenzia nouă
-      dispatch({
+      reviewDispatch({
         type: 'ADD_REVIEW',
         payload: review,
       });
 
-      // Resetează câmpurile de input
       setUserRating(0);
       setComment('');
       setSubmittedReview(true);
@@ -186,26 +193,23 @@ function MovieTvDetails() {
         <div className="reviews-container">
           <h3>Reviews</h3>
 
-          {state.isAuthenticated &&
-            state.user.reviews &&
-            state.user.reviews.length > 0 && (
-              <>
-                <h4>Your Reviews</h4>
-                {state.user.reviews.map((review, index) => (
-                  <div key={index} className="review">
-                    <p>
-                      <strong>Author:</strong> {state.user.username}
-                    </p>
-                    <p>
-                      <strong>Rating:</strong> {review.rating}/10
-                    </p>
-                    <p>
-                      <strong>Comment:</strong> {review.comment}
-                    </p>
-                  </div>
-                ))}
-              </>
-            )}
+          {reviewState.reviews && reviewState.reviews.length > 0 && (
+            <>
+              {reviewState.reviews.map((review, index) => (
+                <div key={index} className="review">
+                  <p>
+                    <strong>Author:</strong> {review.username}
+                  </p>
+                  <p>
+                    <strong>Rating:</strong> {review.rating}/10
+                  </p>
+                  <p>
+                    <strong>Comment:</strong> {review.comment}
+                  </p>
+                </div>
+              ))}
+            </>
+          )}
 
           {reviewsLoading && <p>Loading TMDB reviews...</p>}
           {reviewsError && <p>Error loading reviews: {reviewsError.message}</p>}

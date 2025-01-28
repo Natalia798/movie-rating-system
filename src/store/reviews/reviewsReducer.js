@@ -1,38 +1,13 @@
-const initialState = {
-  isAuthenticated: false,
-  user: null,
-};
+const initialState = { user: null, reviews: [] };
 
-const authReducer = (state, action) => {
+const reviewsReducer = (state, action) => {
   switch (action.type) {
-    case 'LOGIN':
-      return {
-        ...state,
-        isAuthenticated: true,
-        user: action.payload,
-      };
-
-    case 'REGISTER':
-      return {
-        ...state,
-        isAuthenticated: true,
-        user: action.payload,
-      };
-
-    case 'LOGOUT':
-      return {
-        ...state,
-        isAuthenticated: false,
-        user: null,
-      };
-
-    case 'ADD_REVIEW':
+    case 'ADD_REVIEW': {
       const review = action.payload;
-
       const users = JSON.parse(localStorage.getItem('users')) || [];
 
       const updatedUsers = users.map((user) =>
-        user.username === state.user.username
+        state.user && user.username === state.user.username
           ? {
               ...user,
               reviews: [
@@ -47,20 +22,29 @@ const authReducer = (state, action) => {
 
       localStorage.setItem('users', JSON.stringify(updatedUsers));
 
-      return state;
+      return {
+        ...state,
+        reviews: [
+          ...state.reviews.filter((r) => r.movieId !== review.movieId),
+          review,
+        ],
+      };
+    }
 
-    case 'SET_USER_REVIEWS':
+    case 'SET_USER_REVIEWS': {
       return {
         ...state,
         user: {
           ...state.user,
           reviews: action.payload,
         },
+        reviews: action.payload,
       };
+    }
 
     default:
       return state;
   }
 };
 
-export { authReducer, initialState };
+export { reviewsReducer, initialState };

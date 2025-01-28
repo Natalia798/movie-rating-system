@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { AuthContext } from '../store/auth/context';
+import { AuthContext } from '../store/auth/authContext';
 import AuthForm from '../components/AuthForm';
 
 function Login() {

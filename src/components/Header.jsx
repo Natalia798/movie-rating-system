@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import Container from 'react-bootstrap/Container';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../store/auth/context';
+import { AuthContext } from '../store/auth/authContext';
 import { useNavigate } from 'react-router-dom';
 import './Header.css';
 
