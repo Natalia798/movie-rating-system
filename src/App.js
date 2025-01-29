@@ -10,6 +10,7 @@ import Page404 from './pages/Page404';
 import Register from './pages/Register';
 import Layout from './components/Layout';
 import Login from './pages/Login';
+import PreferencesPage from './pages/PreferencesPage';
 import MovieTvCategory from './pages/MovieTvCategory';
 import MovieTvDetails from './pages/MovieDetails';
 import { reviewsReducer } from './store/reviews/reviewsReducer';
@@ -56,6 +57,10 @@ function App() {
                 <Route
                   path="/category/:category/:itemId"
                   element={<MovieTvDetails />}
+                />
+                <Route
+                  path="/preferences/:type"
+                  element={<PreferencesPage />}
                 />
               </Routes>
             </Layout>

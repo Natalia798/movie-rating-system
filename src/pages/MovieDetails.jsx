@@ -25,7 +25,8 @@ function MovieTvDetails() {
   const { category, itemId } = useParams();
   const [userRating, setUserRating] = useState(0);
   const [comment, setComment] = useState('');
-  const [setSubmittedReview] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [submittedReview, setSubmittedReview] = useState(false);
   const [movieTvDetails, setMovieTvDetails] = useState({});
   const { favoritesWatchlistDispatch } = useContext(FavoritesWatchlistContext);
 
@@ -284,7 +285,7 @@ function MovieTvDetails() {
 
           {reviewState.reviews && reviewState.reviews.length > 0
             ? reviewState.reviews
-                .filter((review) => review.movieId === itemId) // Filtrează recenziile pentru itemId
+                .filter((review) => review.movieId === itemId)
                 .map((review, index) => (
                   <div key={index} className="review">
                     <p>
@@ -315,7 +316,7 @@ function MovieTvDetails() {
                   <strong>Rating:</strong>{' '}
                   {review.author_details.rating || 'N/A'} /10
                 </p>
-                <p>{truncateText(review.content, 250)}</p>
+                <p>{truncateText(review.content, 300)}</p>
               </div>
             ))
           ) : (

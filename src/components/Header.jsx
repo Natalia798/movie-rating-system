@@ -46,10 +46,10 @@ function Header() {
               {state.isAuthenticated ? (
                 <>
                   <li className={isDisplayed ? 'container' : null}>
-                    <Link to="/">FAVORITES</Link>
+                    <Link to="/preferences/favorites">FAVORITES</Link>
                   </li>
                   <li className={isDisplayed ? 'container' : null}>
-                    <Link to="/">WATCHLIST</Link>
+                    <Link to="/preferences/watchlist">WATCHLIST</Link>
                   </li>
                   <li className={isDisplayed ? 'container' : null}>
                     <Link to="/" onClick={handleLogout}>
