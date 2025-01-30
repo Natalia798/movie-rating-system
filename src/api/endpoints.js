@@ -16,3 +16,19 @@ export function getMovieTvDetailsEndpoint(category, itemId) {
 export function getReviewsEndpoint(category, itemId) {
   return `https://api.themoviedb.org/3/${category}/${itemId}/reviews?api_key=${API_KEY}&language=en-US`;
 }
+
+export function getTrendingMovies() {
+  return `https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}&language=en-US`;
+}
+
+export function getTrendingTVShows() {
+  return `https://api.themoviedb.org/3/trending/tv/week?api_key=${API_KEY}&language=en-US`;
+}
+
+export function getTopRatedMovies() {
+  return `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}&language=en-US`;
+}
+
+export function getTopRatedTVShows() {
+  return `https://api.themoviedb.org/3/tv/top_rated?api_key=${API_KEY}&language=en-US`;
+}

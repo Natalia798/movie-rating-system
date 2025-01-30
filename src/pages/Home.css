@@ -1,0 +1,8 @@
+.sections {
+  padding: 20px 0;
+  border-top: 2px solid var(--line-color);
+}
+
+.sections:first-child {
+  border-top: none;
+}

@@ -38,6 +38,9 @@ function Header() {
             </span>
             <ul className={dropdownMenuClasses}>
               <li className={isDisplayed ? 'container' : null}>
+                <Link to="/">HOME</Link>
+              </li>
+              <li className={isDisplayed ? 'container' : null}>
                 <Link to="/category/movie">MOVIES</Link>
               </li>
               <li className={isDisplayed ? 'container' : null}>
