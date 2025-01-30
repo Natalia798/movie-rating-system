@@ -16,5 +16,6 @@ export function getMovieTvDetails(data, genreList) {
     voteAverage: data.vote_average || 'No rating available',
     voteCount: data.vote_count || 'No votes available',
     genres: genreNames || ['No genres available'],
+    mediaType: data.media_type || (data.name ? 'tv' : 'movie'),
   };
 }

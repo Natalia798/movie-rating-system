@@ -6,7 +6,7 @@ function MovieTvCardList({ movieTvList, onRemove }) {
   return (
     <div className="row">
       {movieTvList.map((item) => {
-        const category = item.media_type || (item.title ? 'movie' : 'tv');
+        const category = item.mediaType;
 
         return (
           <div key={item.id} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
