@@ -31,7 +31,7 @@ function Pagination(props) {
   }
 
   return (
-    <div className="d-flex justify-content-center">
+    <div className="pagination-container">
       <BootstrapPagination className="Pagination">{items}</BootstrapPagination>
     </div>
   );

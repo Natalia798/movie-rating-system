@@ -14,6 +14,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 import './HorizontalCarousel.css';
+import noImage from '../assets/noImage.png';
 
 const categoryEndpoints = {
   trending_movies: getTrendingMovies,
@@ -93,23 +94,17 @@ function HorizontalCarousel({ title, category }) {
               className="carousel-item-link"
             >
               <Card className="item-card">
-                {item.imageUrl ? (
-                  <Card.Img
-                    variant="top"
-                    src={item.imageUrl}
-                    alt={item.title || item.name}
-                    className="item-card-img"
-                  />
-                ) : item.poster_path ? (
-                  <Card.Img
-                    variant="top"
-                    src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                    alt={item.title || item.name}
-                    className="item-card-img"
-                  />
-                ) : (
-                  <p>No image available</p>
-                )}
+                <Card.Img
+                  variant="top"
+                  src={
+                    item.imageUrl ||
+                    (item.poster_path
+                      ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+                      : noImage)
+                  }
+                  alt={item.title || item.name}
+                  className="item-card-img"
+                />
 
                 <Card.Body className="item-card-body">
                   <Card.Title className="item-card-title">

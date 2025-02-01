@@ -1,6 +1,7 @@
 import { Card, Button } from 'react-bootstrap';
 import './MovieTvCardList.css';
 import { Link } from 'react-router-dom';
+import noImage from '../assets/noImage.png';
 
 function MovieTvCardList({ movieTvList, onRemove }) {
   return (
@@ -16,14 +17,17 @@ function MovieTvCardList({ movieTvList, onRemove }) {
                 state={{ category }}
                 onClick={(e) => e.stopPropagation()}
               >
-                {item.imageUrl && (
-                  <Card.Img
-                    variant="top"
-                    src={item.imageUrl}
-                    alt={item.title}
-                    className="item-card-img"
-                  />
-                )}
+                <Card.Img
+                  variant="top"
+                  src={
+                    item.imageUrl ||
+                    (item.poster_path
+                      ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+                      : noImage)
+                  }
+                  alt={item.title || item.name}
+                  className="item-card-img"
+                />
               </Link>
 
               <Card.Body className="item-card-body">
