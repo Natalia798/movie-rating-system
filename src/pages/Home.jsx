@@ -59,7 +59,7 @@ function Home() {
 
 const CategorySection = ({ title, children, className }) => (
   <div className={`sections ${className}`}>
-    <h2>{title}</h2>
+    <h2 className="mb-3 pt-3">{title}</h2>
     <div className="carousel-wrapper">{children}</div>
   </div>
 );

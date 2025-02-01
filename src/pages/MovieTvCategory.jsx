@@ -56,8 +56,8 @@ function MovieTvCategory() {
   if (errorMovies || errorGenres) return <div>Error loading data</div>;
 
   return (
-    <Container className="my-5">
-      <h1 className="mb-5 pt-3">{title}</h1>
+    <Container>
+      <h2 className="mb-3 pt-3">{title}</h2>
       <MovieTvCardList
         movieTvList={adaptedMovieTvList}
         genreList={genresData?.genres || []}

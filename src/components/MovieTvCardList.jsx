@@ -4,16 +4,15 @@ import { Link } from 'react-router-dom';
 
 function MovieTvCardList({ movieTvList, onRemove }) {
   return (
-    <div className="row">
+    <div className="flex-container">
       {movieTvList.map((item) => {
         const category = item.mediaType;
 
         return (
-          <div key={item.id} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-            <Card className="movie-card">
+          <div key={item.id} className="flex-item">
+            <Card className="item-card">
               <Link
                 to={`/category/${category}/${item.id}`}
-                className="movie-link"
                 state={{ category }}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -22,48 +21,38 @@ function MovieTvCardList({ movieTvList, onRemove }) {
                     variant="top"
                     src={item.imageUrl}
                     alt={item.title}
-                    className="movie-card-img"
+                    className="item-card-img"
                   />
                 )}
               </Link>
 
-              <Card.Body className="movie-card-body">
+              <Card.Body className="item-card-body">
                 <Link
                   to={`/category/${category}/${item.id}`}
-                  className="movie-link"
                   state={{ category }}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <Card.Title className="movie-card-title">
+                  <Card.Title className="item-card-title">
                     {item.title}
                   </Card.Title>
+
+                  <Card.Text className="item-card-text">
+                    <strong>Rating:</strong> {item.voteAverage} / 10
+                  </Card.Text>
                 </Link>
 
-                <Card.Text className="movie-card-text">
-                  <strong>Rating:</strong> {item.voteAverage} / 10
-                </Card.Text>
-
-                <div className="details-container">
-                  <Link
-                    to={`/category/${category}/${item.id}`}
-                    state={{ category }}
+                {onRemove && (
+                  <Button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onRemove(item.id);
+                    }}
+                    className="remove-button"
                   >
-                    <Button className="details-button">Details</Button>
-                  </Link>
-
-                  {onRemove && (
-                    <Button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        onRemove(item.id);
-                      }}
-                      className="remove-button"
-                    >
-                      &#10006;
-                    </Button>
-                  )}
-                </div>
+                    &#10006;
+                  </Button>
+                )}
               </Card.Body>
             </Card>
           </div>

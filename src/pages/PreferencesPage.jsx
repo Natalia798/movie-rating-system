@@ -46,8 +46,10 @@ function PreferencesPage() {
   };
 
   return (
-    <Container className="preferences-container">
-      <h1>{type === 'favorites' ? 'Your Favorites' : 'Your Watchlist'}</h1>
+    <Container>
+      <h2 className="mb-3 pt-3">
+        {type === 'favorites' ? 'Your Favorites' : 'Your Watchlist'}
+      </h2>
       {movies.length === 0 ? (
         <p>No movies in {type}.</p>
       ) : (

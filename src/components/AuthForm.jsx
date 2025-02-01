@@ -27,7 +27,9 @@ function AuthForm({
 
   return (
     <Container className={styles.container}>
-      <h2>{formType === 'register' ? 'Create Account' : 'Login'}</h2>
+      <h2 className="mb-3 pt-3">
+        {formType === 'register' ? 'Create Account' : 'Login'}
+      </h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="username">
           <Form.Label>Username</Form.Label>
