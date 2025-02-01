@@ -52,10 +52,13 @@ function MovieTvDetails() {
   } = useFetch(reviewsEndpoint);
 
   useEffect(() => {
-    if (fetchedMovieTvDetails && genresData) {
-      const genreList = genresData?.genres || [];
-      setMovieTvDetails(getMovieTvDetails(fetchedMovieTvDetails, genreList));
+    if (!fetchedMovieTvDetails || !genresData || !genresData.genres) {
+      return;
     }
+
+    const genreList = genresData.genres;
+
+    setMovieTvDetails(getMovieTvDetails(fetchedMovieTvDetails, genreList));
   }, [fetchedMovieTvDetails, genresData]);
 
   useEffect(() => {
@@ -78,6 +81,50 @@ function MovieTvDetails() {
     }
   }, [state.isAuthenticated, state.user?.username, itemId, reviewDispatch]);
 
+  useEffect(() => {
+    if (
+      !movieTvDetails ||
+      !movieTvDetails.id ||
+      !state.isAuthenticated ||
+      !state.user
+    )
+      return;
+
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const currentUserIndex = users.findIndex(
+      (user) => user.username === state.user.username
+    );
+    if (currentUserIndex === -1) return;
+
+    const currentUser = users[currentUserIndex];
+    const viewedItems = currentUser.recentlyViewed || [];
+
+    const isAlreadyViewed = viewedItems.some(
+      (item) => item.id === movieTvDetails.id
+    );
+
+    if (!isAlreadyViewed) {
+      const updatedViewedItems = [
+        {
+          id: movieTvDetails.id,
+          title: movieTvDetails.title,
+          mediaType: movieTvDetails.mediaType,
+          imageUrl: movieTvDetails.imageUrl,
+          voteAverage: movieTvDetails.voteAverage,
+          timestamp: new Date().getTime(),
+        },
+        ...viewedItems,
+      ].slice(0, 20);
+
+      users[currentUserIndex] = {
+        ...currentUser,
+        recentlyViewed: updatedViewedItems,
+      };
+
+      localStorage.setItem('users', JSON.stringify(users));
+    }
+  }, [movieTvDetails, state.isAuthenticated, state.user]);
+
   if (loading || genresLoading) return <div>Loading...</div>;
   if (error || genresError)
     return <div>{error ? error.message : genresError.message}</div>;
@@ -92,11 +139,25 @@ function MovieTvDetails() {
     event.preventDefault();
 
     if (comment && userRating) {
+      let genreIds = Array.isArray(movieTvDetails.genre_ids)
+        ? movieTvDetails.genre_ids.filter(
+            (id) => id !== null && id !== undefined
+          )
+        : [];
+
+      if (genreIds.length === 0 && Array.isArray(movieTvDetails.genres)) {
+        genreIds = movieTvDetails.genres
+          .map((genre) => genre.id)
+          .filter((id) => id !== null && id !== undefined);
+      }
+
       const review = {
         movieId: itemId,
         comment: comment,
         rating: userRating,
         username: state.user.username,
+        mediaType: category,
+        genre_ids: genreIds.length > 0 ? genreIds : ['Unknown'],
       };
 
       const users = JSON.parse(localStorage.getItem('users')) || [];

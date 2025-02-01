@@ -32,3 +32,27 @@ export function getTopRatedMovies() {
 export function getTopRatedTVShows() {
   return `https://api.themoviedb.org/3/tv/top_rated?api_key=${API_KEY}&language=en-US`;
 }
+
+export function getMoviesByGenres(genres, pageNumber = 1) {
+  if (!Array.isArray(genres) || genres.length === 0) {
+    return null;
+  }
+
+  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&page=${pageNumber}&with_genres=${genres.join(
+    ','
+  )}`;
+
+  return url;
+}
+
+export function getTVShowsByGenres(genres, pageNumber = 1) {
+  if (!Array.isArray(genres) || genres.length === 0) {
+    return null;
+  }
+
+  const url = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=en-US&page=${pageNumber}&with_genres=${genres.join(
+    ','
+  )}`;
+
+  return url;
+}
