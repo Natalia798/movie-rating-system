@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import HorizontalCarousel from '../components/HorizontalCarousel';
 import './Home.css';
 import { useRecentlyViewed } from '../utils/hooks/useRecentlyViewed';
+import { useUserPreferredGenres } from '../utils/hooks/useUserPreferredGenres';
 import { AuthContext } from '../store/auth/authContext';
-import { useContext } from 'react';
 
 function Home() {
   const { state } = useContext(AuthContext);
   const { recentMovies, recentTVShows } = useRecentlyViewed();
+  const { hasPreferences } = useUserPreferredGenres();
 
   const isAuthenticated = state.isAuthenticated && state.user;
-  const hasRecentMovies = (recentMovies?.length || 0) > 0;
-  const hasRecentTVShows = (recentTVShows?.length || 0) > 0;
+  const hasRecentMovies = recentMovies?.length > 0;
+  const hasRecentTVShows = recentTVShows?.length > 0;
 
   return (
     <section className="home-container">
@@ -25,40 +26,40 @@ function Home() {
         <HorizontalCarousel title="TV Shows" category="top_tv" />
       </CategorySection>
 
-      {isAuthenticated && (
+      {isAuthenticated && hasPreferences ? (
         <CategorySection title="Recommended for You">
           <HorizontalCarousel title="Movies" category="recommended_movies" />
           <HorizontalCarousel title="TV Shows" category="recommended_tv" />
         </CategorySection>
-      )}
+      ) : isAuthenticated ? (
+        <p className="no-recommended">
+          Start adding favorites or watchlist items to get personalized
+          recommendations!
+        </p>
+      ) : null}
 
       {isAuthenticated && (hasRecentMovies || hasRecentTVShows) && (
         <CategorySection title="Recently Viewed">
-          {hasRecentMovies ? (
+          {hasRecentMovies && (
             <HorizontalCarousel title="Movies" category="viewed_movies" />
-          ) : (
+          )}
+          {hasRecentTVShows && (
+            <HorizontalCarousel title="TV Shows" category="viewed_tv" />
+          )}
+          {!hasRecentMovies && (
             <p className="no-recently-viewed">No recently viewed movies.</p>
           )}
-
-          {hasRecentTVShows ? (
-            <HorizontalCarousel title="TV Shows" category="viewed_tv" />
-          ) : (
+          {!hasRecentTVShows && (
             <p className="no-recently-viewed">No recently viewed TV shows.</p>
           )}
         </CategorySection>
-      )}
-
-      {isAuthenticated && !hasRecentMovies && !hasRecentTVShows && (
-        <p className="no-recently-viewed">
-          You haven't viewed any movies or TV shows recently.
-        </p>
       )}
     </section>
   );
 }
 
-const CategorySection = ({ title, children, className }) => (
-  <div className={`sections ${className}`}>
+const CategorySection = ({ title, children }) => (
+  <div className="sections">
     <h2 className="mb-3 pt-3">{title}</h2>
     <div className="carousel-wrapper">{children}</div>
   </div>

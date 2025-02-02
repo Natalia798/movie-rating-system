@@ -42,23 +42,17 @@ function HorizontalCarousel({ title, category }) {
   const { data, loading, error } = useFetch(url);
 
   useEffect(() => {
+    let fetchedItems = [];
+
     if (category === 'viewed_movies') {
-      if (recentMovies === null) {
-        return;
-      }
-      setItems([...recentMovies]);
-      return;
+      fetchedItems = recentMovies || [];
+    } else if (category === 'viewed_tv') {
+      fetchedItems = recentTVShows || [];
+    } else if (data?.results) {
+      fetchedItems = data.results;
     }
-    if (category === 'viewed_tv') {
-      if (recentTVShows === null) {
-        return;
-      }
-      setItems([...recentTVShows]);
-      return;
-    }
-    if (data?.results) {
-      setItems([...data.results]);
-    }
+
+    setItems(fetchedItems);
   }, [category, data, recentMovies, recentTVShows]);
 
   const categoryType = category.includes('movie') ? 'movie' : 'tv';
