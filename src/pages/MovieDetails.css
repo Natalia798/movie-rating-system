@@ -58,6 +58,46 @@
   margin-right: 10px;
 }
 
+.share-buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.share-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
+  color: white;
+}
+
+.share-button.fb {
+  background-color: #3b5998;
+}
+
+.share-button.twitter {
+  background-color: #1da1f2;
+}
+
+.share-button.whatsapp {
+  background-color: #25d366;
+}
+
+.share-button.copy {
+  background-color: #444;
+  cursor: pointer;
+  border: none;
+}
+
+.share-button:hover {
+  opacity: 0.8;
+}
+
 .review-section {
   display: flex;
   flex-direction: column;

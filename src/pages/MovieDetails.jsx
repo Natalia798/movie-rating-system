@@ -16,6 +16,7 @@ import {
   addToFavorites,
   addToWatchlist,
 } from '../store/favorites/favoritesActions';
+import { FaFacebook, FaTwitter, FaWhatsapp } from 'react-icons/fa';
 
 import './MovieDetails.css';
 
@@ -266,6 +267,8 @@ function MovieTvDetails() {
     return text;
   };
 
+  const shareUrl = window.location.href;
+
   return (
     <Container className="movie-container">
       <h1 className="title">{title}</h1>
@@ -299,6 +302,32 @@ function MovieTvDetails() {
               <Button className="buttons" onClick={handleAddToWatchlistButton}>
                 Add to Watchlist
               </Button>
+              <div className="share-buttons">
+                <p>
+                  <strong>Share:</strong>
+                </p>
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaFacebook className="social-icon facebook" />
+                </a>
+                <a
+                  href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=${title}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaTwitter className="social-icon twitter" />
+                </a>
+                <a
+                  href={`https://wa.me/?text=${title} - ${shareUrl}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaWhatsapp className="social-icon whatsapp" />
+                </a>
+              </div>
             </div>
           )}
         </div>
