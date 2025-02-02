@@ -30,6 +30,15 @@ function MovieTvDetails() {
   const [submittedReview, setSubmittedReview] = useState(false);
   const [movieTvDetails, setMovieTvDetails] = useState({});
   const { favoritesWatchlistDispatch } = useContext(FavoritesWatchlistContext);
+  const [alert, setAlert] = useState({ message: '', type: '', visible: false });
+
+  const showAlert = (message, type = 'success') => {
+    setAlert({ message, type, visible: true });
+
+    setTimeout(() => {
+      setAlert((prev) => ({ ...prev, visible: false }));
+    }, 2000);
+  };
 
   const movieDetailsEndpoint = getMovieTvDetailsEndpoint(category, itemId);
   const {
@@ -56,11 +65,18 @@ function MovieTvDetails() {
     if (!fetchedMovieTvDetails || !genresData || !genresData.genres) {
       return;
     }
+    const storedMovies = JSON.parse(localStorage.getItem('movieRatings')) || {};
+    const storedMovieData = storedMovies[itemId];
 
     const genreList = genresData.genres;
+    const movieData = getMovieTvDetails(fetchedMovieTvDetails, genreList);
 
-    setMovieTvDetails(getMovieTvDetails(fetchedMovieTvDetails, genreList));
-  }, [fetchedMovieTvDetails, genresData]);
+    setMovieTvDetails({
+      ...movieData,
+      voteAverage: storedMovieData?.voteAverage || movieData.voteAverage,
+      voteCount: storedMovieData?.voteCount || movieData.voteCount,
+    });
+  }, [fetchedMovieTvDetails, genresData, itemId]);
 
   useEffect(() => {
     if (state.isAuthenticated) {
@@ -126,6 +142,17 @@ function MovieTvDetails() {
     }
   }, [movieTvDetails, state.isAuthenticated, state.user]);
 
+  useEffect(() => {
+    const storedMovies = JSON.parse(localStorage.getItem('movieRatings')) || {};
+    if (storedMovies[itemId]) {
+      setMovieTvDetails((prevDetails) => ({
+        ...prevDetails,
+        voteAverage: storedMovies[itemId].voteAverage,
+        voteCount: storedMovies[itemId].voteCount,
+      }));
+    }
+  }, [itemId]);
+
   if (loading || genresLoading) return <div>Loading...</div>;
   if (error || genresError)
     return <div>{error ? error.message : genresError.message}</div>;
@@ -152,10 +179,20 @@ function MovieTvDetails() {
           .filter((id) => id !== null && id !== undefined);
       }
 
+      const parsedRating = parseFloat(userRating);
+
+      if (!comment || parsedRating < 1 || parsedRating > 10) {
+        showAlert(
+          'Please enter a valid rating between 1 and 10, and a comment.',
+          'error'
+        );
+        return;
+      }
+
       const review = {
         movieId: itemId,
-        comment: comment,
-        rating: userRating,
+        comment,
+        rating: parsedRating,
         username: state.user.username,
         mediaType: category,
         genre_ids: genreIds.length > 0 ? genreIds : ['Unknown'],
@@ -180,12 +217,39 @@ function MovieTvDetails() {
         payload: review,
       });
 
+      updateMovieRating(parsedRating);
+
       setUserRating(0);
       setComment('');
       setSubmittedReview(true);
     } else {
-      alert('Please enter both a comment and a rating.');
+      showAlert('Please enter both a comment and a rating.', 'error');
     }
+  };
+
+  const updateMovieRating = (newRating) => {
+    const existingReviews = [...reviewState.reviews, { rating: newRating }];
+    const totalRatings = existingReviews.length;
+    const sumRatings = existingReviews.reduce(
+      (sum, review) => sum + review.rating,
+      0
+    );
+    const updatedRating = (sumRatings / totalRatings).toFixed(1);
+
+    const newVoteCount = movieTvDetails.voteCount + 1;
+
+    setMovieTvDetails((prevDetails) => ({
+      ...prevDetails,
+      voteAverage: updatedRating,
+      voteCount: newVoteCount,
+    }));
+
+    const storedMovies = JSON.parse(localStorage.getItem('movieRatings')) || {};
+    storedMovies[itemId] = {
+      voteAverage: updatedRating,
+      voteCount: newVoteCount,
+    };
+    localStorage.setItem('movieRatings', JSON.stringify(storedMovies));
   };
 
   const handleAddToFavoritesButton = (event) => {
@@ -215,12 +279,12 @@ function MovieTvDetails() {
         localStorage.setItem('users', JSON.stringify(updatedUsers));
 
         favoritesWatchlistDispatch(addToFavorites(movieTvDetails));
-        alert('Added to Favorites!');
+        showAlert('Added to Favorites!', 'success');
       } else {
-        alert('This movie is already in your favorites!');
+        showAlert('This movie is already in your favorites!', 'warning');
       }
     } else {
-      alert('User not found.');
+      showAlert('User not found.', 'error');
     }
   };
 
@@ -251,12 +315,12 @@ function MovieTvDetails() {
         localStorage.setItem('users', JSON.stringify(updatedUsers));
 
         favoritesWatchlistDispatch(addToWatchlist(movieTvDetails));
-        alert('Added to Watchlist!');
+        showAlert('Added to Watchlist!', 'success');
       } else {
-        alert('This movie is already in your watchlist!');
+        showAlert('This movie is already in your watchlist!', 'warning');
       }
     } else {
-      alert('User not found.');
+      showAlert('User not found.', 'error');
     }
   };
 
@@ -271,6 +335,18 @@ function MovieTvDetails() {
 
   return (
     <Container className="movie-container">
+      {alert.visible && (
+        <div className={`custom-alert ${alert.type}`}>
+          {alert.message}
+          <button
+            className="close-alert"
+            onClick={() => setAlert({ ...alert, visible: false })}
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       <h1 className="title">{title}</h1>
       <div className="movie-details-container">
         <div className="image-container">
