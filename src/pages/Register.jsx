@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../store/auth/authContext';
 import AuthForm from '../components/AuthForm';
+import { hashPassword } from '../utils/cryptoUtils';
 
 function Register() {
   const { dispatch } = useContext(AuthContext);
 
-  function handleRegister(username, password, setError, navigate) {
+  async function handleRegister(username, password, setError, navigate) {
     const users = JSON.parse(localStorage.getItem('users')) || [];
 
     if (users.some((user) => user.username === username)) {
@@ -13,7 +14,9 @@ function Register() {
       return;
     }
 
-    const newUser = { username, password, reviews: [] };
+    const hashedPassword = await hashPassword(password);
+
+    const newUser = { username, password: hashedPassword, reviews: [] };
     users.push(newUser);
     localStorage.setItem('users', JSON.stringify(users));
 
