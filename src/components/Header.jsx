@@ -14,7 +14,9 @@ function Header() {
   const handleLogout = () => {
     localStorage.removeItem('user');
     dispatch({ type: 'LOGOUT' });
+
     navigate('/');
+    window.location.reload();
   };
 
   function handleMenuClick() {

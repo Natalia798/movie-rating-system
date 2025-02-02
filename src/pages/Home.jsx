@@ -8,11 +8,13 @@ import { AuthContext } from '../store/auth/authContext';
 function Home() {
   const { state } = useContext(AuthContext);
   const { recentMovies, recentTVShows } = useRecentlyViewed();
-  const { hasPreferences } = useUserPreferredGenres();
+  const { hasMoviePreferences, hasTVPreferences } = useUserPreferredGenres();
 
   const isAuthenticated = state.isAuthenticated && state.user;
   const hasRecentMovies = recentMovies?.length > 0;
   const hasRecentTVShows = recentTVShows?.length > 0;
+  const hasRecentActivity = hasRecentMovies || hasRecentTVShows;
+  const hasSomePreferences = hasMoviePreferences || hasTVPreferences;
 
   return (
     <section className="home-container">
@@ -26,31 +28,65 @@ function Home() {
         <HorizontalCarousel title="TV Shows" category="top_tv" />
       </CategorySection>
 
-      {isAuthenticated && hasPreferences ? (
+      {isAuthenticated && (
         <CategorySection title="Recommended for You">
-          <HorizontalCarousel title="Movies" category="recommended_movies" />
-          <HorizontalCarousel title="TV Shows" category="recommended_tv" />
-        </CategorySection>
-      ) : isAuthenticated ? (
-        <p className="no-recommended">
-          Start adding favorites or watchlist items to get personalized
-          recommendations!
-        </p>
-      ) : null}
+          {hasSomePreferences ? (
+            <>
+              {hasMoviePreferences ? (
+                <HorizontalCarousel
+                  title="Movies"
+                  category="recommended_movies"
+                />
+              ) : (
+                <p className="no-recommended">
+                  Start adding favorite movies to get recommendations!
+                </p>
+              )}
 
-      {isAuthenticated && (hasRecentMovies || hasRecentTVShows) && (
+              {hasTVPreferences ? (
+                <HorizontalCarousel
+                  title="TV Shows"
+                  category="recommended_tv"
+                />
+              ) : (
+                <p className="no-recommended">
+                  Start adding favorite TV shows to get recommendations!
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="no-recommended">
+              Start adding favorites or watchlist items to get personalized
+              recommendations!
+            </p>
+          )}
+        </CategorySection>
+      )}
+
+      {isAuthenticated && (
         <CategorySection title="Recently Viewed">
-          {hasRecentMovies && (
-            <HorizontalCarousel title="Movies" category="viewed_movies" />
-          )}
-          {hasRecentTVShows && (
-            <HorizontalCarousel title="TV Shows" category="viewed_tv" />
-          )}
-          {!hasRecentMovies && (
-            <p className="no-recently-viewed">No recently viewed movies.</p>
-          )}
-          {!hasRecentTVShows && (
-            <p className="no-recently-viewed">No recently viewed TV shows.</p>
+          {hasRecentActivity ? (
+            <>
+              {hasRecentMovies ? (
+                <HorizontalCarousel title="Movies" category="viewed_movies" />
+              ) : (
+                <p className="no-recently-viewed">
+                  You haven’t watched any movies yet.
+                </p>
+              )}
+
+              {hasRecentTVShows ? (
+                <HorizontalCarousel title="TV Shows" category="viewed_tv" />
+              ) : (
+                <p className="no-recently-viewed">
+                  You haven’t watched any TV shows yet.
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="no-recently-viewed">
+              Start watching to track your history!
+            </p>
           )}
         </CategorySection>
       )}

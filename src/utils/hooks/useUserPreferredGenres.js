@@ -1,11 +1,17 @@
 import { useMemo } from 'react';
 
 export function useUserPreferredGenres() {
-  const loggedInUser = JSON.parse(localStorage.getItem('user'));
-  const users = JSON.parse(localStorage.getItem('users')) || [];
+  const loggedInUser = useMemo(() => {
+    return JSON.parse(localStorage.getItem('user')) || null;
+  }, []);
 
-  const currentUser =
-    users.find((u) => u.email === loggedInUser?.email) || null;
+  const users = useMemo(() => {
+    return JSON.parse(localStorage.getItem('users')) || [];
+  }, []);
+
+  const currentUser = useMemo(() => {
+    return users.find((u) => u.username === loggedInUser?.username) || null;
+  }, [users, loggedInUser?.username]);
 
   const { favorites, watchlist, reviews } = useMemo(() => {
     return {
@@ -33,9 +39,21 @@ export function useUserPreferredGenres() {
       .flatMap((tvShow) => tvShow.genre_ids);
   }, [combinedList]);
 
-  const hasPreferences = useMemo(() => {
-    return favorites.length > 0 || watchlist.length > 0 || reviews.length > 0;
-  }, [favorites, watchlist, reviews]);
+  const hasMoviePreferences = useMemo(
+    () => movieGenres.length > 0,
+    [movieGenres]
+  );
+  const hasTVPreferences = useMemo(() => tvGenres.length > 0, [tvGenres]);
 
-  return { movieGenres, tvGenres, hasPreferences };
+  const hasPreferences = useMemo(() => {
+    return hasMoviePreferences || hasTVPreferences;
+  }, [hasMoviePreferences, hasTVPreferences]);
+
+  return {
+    movieGenres,
+    tvGenres,
+    hasPreferences,
+    hasMoviePreferences,
+    hasTVPreferences,
+  };
 }
