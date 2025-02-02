@@ -106,7 +106,7 @@ function HorizontalCarousel({ title, category }) {
                   </Card.Title>
                   <Card.Text className="item-card-text">
                     <strong>Rating:</strong>{' '}
-                    {item.voteAverage || item.vote_average} / 10
+                    {(item.voteAverage || item.vote_average)?.toFixed(2)} / 10
                   </Card.Text>
                 </Card.Body>
               </Card>

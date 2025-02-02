@@ -364,7 +364,9 @@ function MovieTvDetails() {
             <strong>Description: </strong> {description}
           </p>
           <p>
-            <strong>Rating:</strong> {voteAverage} ({voteCount} votes)
+            <strong>Rating:</strong>{' '}
+            {Number(voteAverage) ? Number(voteAverage).toFixed(2) : 'N/A'} (
+            {voteCount} votes)
           </p>
 
           {state.isAuthenticated && (
