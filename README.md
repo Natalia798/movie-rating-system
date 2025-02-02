@@ -1,71 +1,90 @@
-# Getting Started with Create React App
+# Movie Rating System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+This project is a **Movie Rating System** that allows users to browse movies and TV shows, add favorites, rate content, and leave reviews. The project retrieves data from an external API (**TMDB**) and provides personalized recommendations based on user preferences and viewing history.
 
-In the project directory, you can run:
+The system is built using **React.js**, styled with **CSS**, and manages user interactions through **localStorage** for authentication, favorites, watchlist, and reviews.
 
-### `npm start`
+## Features Implemented
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+✅ Responsive design for both **mobile** and **desktop**
+✅ **Cross-browser compatibility** (Chrome, Firefox, Safari, Edge)
+✅ **Movie and TV show grid** populated with data from **TMDB API**
+✅ **Pagination** for movies list
+✅ **Genre filtering**
+✅ **Search functionality**
+✅ **Sort functionality**
+✅ **Favorite movies/TV shows** feature
+✅ **Watchlist** feature for planned movies/TV shows
+✅ **Star rating system** to rate each movie/TV show
+✅ **User reviews** (comments for movies/TV shows)
+✅ **Trending now** section
+✅ **Top rated** section
+✅ **Recommended for You** section based on user's preferencies
+✅ **Recently Viewed** section based on viewing history
+✅ **Social media sharing** (Facebook, Twitter, WhatsApp)
+✅ **Basic authentication** (username & password stored in localStorage)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Future Improvements
 
-### `npm test`
+🔹 Implement **email-based authentication** with validation and secure password storage (instead of localStorage)
+🔹 Use **a real database** instead of localStorage for user data
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Tech Stack
 
-### `npm run build`
+- **React.js** (Frontend framework)
+- **CSS** (for styling)
+- **TMDB API** (for movie and TV show data)
+- **React Hooks** (for state management)
+- **localStorage** (for authentication, user data, favorites, reviews, etc.)
+- **Netlify** (for deployment)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Installation and Setup
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Prerequisites
 
-### `npm run eject`
+Ensure you have **Node.js** and **npm** installed.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Steps to Run Locally
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/Natalia798/movie-rating-system.git
+   cd movie-rating-system
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Start the development server:
+   ```sh
+   npm start
+   ```
+4. Open `http://localhost:3000` in a browser.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Running Tests (if applicable)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+To run tests, use:
 
-## Learn More
+```sh
+npm test
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Deployment
 
-### Code Splitting
+The project is **deployed on Netlify**.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Live Demo: [https://movie-rating-system.netlify.app/](https://your-netlify-link.netlify.app)
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Author
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# movie-rating-system
+👤 **Natalia Popa**  
+📧 natalia98popa@gmail.com
+GitHub: [Natalia798](https://github.com/Natalia798)
