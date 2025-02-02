@@ -77,9 +77,9 @@ Live Demo: [https://movie-rating-system.netlify.app/](https://movie-rating-syste
 
 ## Future Improvements
 
-- 🔹 Implement **email-based authentication** with validation and secure password storage (instead of localStorage)
-- 🔹 Use **a real database** instead of localStorage for user data
-- 🔹 Improve mobile responsive design for a better user experience
+- Implement **email-based authentication** with validation and secure password storage (instead of localStorage)
+- Use **a real database** instead of localStorage for user data
+- Improve mobile responsive design for a better user experience
 
 ---
 
